@@ -1,0 +1,5 @@
+
+# ignore secrets and IDE files
+Lab1/Pace/.env
+Lab1/Pace/.idea/
+node_modules/

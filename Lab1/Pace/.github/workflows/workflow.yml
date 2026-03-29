@@ -1,0 +1,50 @@
+name: CI Test
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.js'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/workflow.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mongo:
+        image: mongo:7
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd="mongosh --quiet mongodb://localhost:27017/admin --eval 'db.runCommand({ ping: 1 }).ok'"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    env:
+      PORT: 8000
+      MONGODB_URL: mongodb://127.0.0.1:27017/user-auth
+      JWT_ACCESS_SECRET: test_access_secret
+      JWT_REFRESH_SECRET: test_refresh_secret
+      NODE_ENV: test
+      FRONTEND_ORIGIN: http://localhost:3000
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+

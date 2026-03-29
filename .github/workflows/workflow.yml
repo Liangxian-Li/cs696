@@ -5,9 +5,9 @@ on:
     branches:
       - main
     paths:
-      - '**/*.js'
-      - 'package.json'
-      - 'package-lock.json'
+      - 'Lab1/Pace/**/*.js'
+      - 'Lab1/Pace/package.json'
+      - 'Lab1/Pace/package-lock.json'
       - '.github/workflows/workflow.yml'
 
 jobs:
@@ -24,6 +24,10 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=10
+
+    defaults:
+      run:
+        working-directory: Lab1/Pace
 
     env:
       PORT: 8000
@@ -47,4 +51,3 @@ jobs:
 
       - name: Run tests
         run: npm test
-
